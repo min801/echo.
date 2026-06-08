@@ -3,352 +3,614 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AI TTS 음성 변환기</title>
+  <title>에코 (Echo) - 눈치 보지 말고, 귀로 듣는 AI 사수</title>
   <style>
-    * { box-sizing: border-box; }
+    * {
+      box-sizing: border-box;
+    }
 
     body {
       margin: 0;
       min-height: 100vh;
-      background: linear-gradient(135deg, #e3f2fd, #fce4ec);
-      font-family: Arial, sans-serif;
-      color: #333;
+      background: #EAEAE4; /* 은은한 크림 그레이 바탕 */
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      color: #2C362B; /* 깊은 카키 차콜 (텍스트 가독성 극대화) */
     }
 
     .container {
-      width: min(900px, 92%);
-      margin: 40px auto;
-      background: #ffffff;
-      border-radius: 24px;
-      padding: 28px;
-      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.16);
+      width: min(960px, 94%);
+      margin: 50px auto;
+      background: #F9F9F6; /* 따뜻한 오프화이트 메인 컨테이너 */
+      border-radius: 20px;
+      padding: 40px;
+      box-shadow: 0 20px 40px rgba(44, 54, 43, 0.08);
+      border: 1px solid rgba(83, 105, 84, 0.1);
     }
 
     h1 {
-      margin: 0 0 8px;
+      margin: 0 0 10px;
       text-align: center;
-      font-size: 28px;
+      font-size: 32px;
+      color: #536954; /* 딥 세이지 그린 브랜드 컬러 */
+      font-weight: 800;
+      letter-spacing: -0.5px;
     }
 
     .subtitle {
       text-align: center;
-      color: #777;
-      margin-bottom: 24px;
-      font-size: 14px;
+      color: #7A8579;
+      margin-bottom: 40px;
+      font-size: 15px;
+      font-weight: 500;
     }
 
-    .info {
-      padding: 14px;
-      margin-bottom: 20px;
-      border-radius: 14px;
-      background: #e8f5e9;
-      color: #2e7d32;
-      font-size: 14px;
-      line-height: 1.6;
+    .auth-box {
+      max-width: 400px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      background: #ffffff;
+      padding: 30px;
+      border-radius: 16px;
+      border: 1px solid rgba(211, 205, 173, 0.5);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
     }
 
-    .option-box {
-      display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
-      gap: 10px;
-      margin-bottom: 14px;
+    h2 {
+      margin-top: 0;
+      font-size: 20px;
+      text-align: center;
+      color: #2C362B;
+      font-weight: 700;
     }
 
-    select, input {
-      height: 44px;
-      padding: 0 12px;
-      border: 1px solid #ddd;
-      border-radius: 12px;
-      font-size: 14px;
+    input, select, textarea {
+      height: 48px;
+      padding: 0 16px;
+      border: 1px solid #D3CDAD; /* 부드러운 올리브 베이지 테두리 */
+      border-radius: 10px;
+      font-size: 15px;
       outline: none;
+      background-color: #ffffff;
+      color: #2C362B;
+      transition: all 0.2s ease;
     }
 
     textarea {
       width: 100%;
-      min-height: 180px;
+      min-height: 120px;
       resize: vertical;
       padding: 16px;
-      border: 1px solid #ddd;
-      border-radius: 16px;
-      font-size: 16px;
-      line-height: 1.5;
-      outline: none;
-      font-family: Arial, sans-serif;
+      line-height: 1.6;
     }
 
-    textarea:focus, select:focus, input:focus {
-      border-color: #42a5f5;
-      box-shadow: 0 0 0 3px rgba(66, 165, 245, 0.15);
+    input:focus, select:focus, textarea:focus {
+      border-color: #536954; /* 포커스 시 딥 세이지 컬러 */
+      box-shadow: 0 0 0 3px rgba(83, 105, 84, 0.15);
     }
 
-    .label {
-      font-weight: bold;
-      margin-bottom: 6px;
-    }
-
-    .button-row {
-      display: flex;
-      gap: 10px;
-      justify-content: flex-end;
-      flex-wrap: wrap;
-      margin-top: 14px;
-    }
-
-    button, .download-link {
+    button {
       border: none;
-      border-radius: 12px;
-      padding: 0 18px;
-      height: 46px;
+      border-radius: 10px;
+      padding: 0 20px;
+      height: 48px;
       font-size: 15px;
       cursor: pointer;
-      transition: 0.15s;
-      font-weight: bold;
-      text-decoration: none;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
+      transition: all 0.2s ease;
+      font-weight: 600;
     }
 
-    button:hover, .download-link:hover {
-      transform: translateY(-2px);
-      opacity: 0.9;
+    button:hover {
+      transform: translateY(-1px);
     }
 
     button:disabled {
       cursor: not-allowed;
-      opacity: 0.6;
-      transform: none;
+      opacity: 0.5;
+      transform: none !important;
     }
 
-    .make-btn {
-      background: #42a5f5;
-      color: white;
+    /* 톤앤매너 매칭 버튼 시스템 */
+    .login-btn { background: #536954; color: #FFFFFF; }
+    .login-btn:hover { background: #435444; }
+    
+    .signup-btn { background: #D3CDAD; color: #2C362B; }
+    .signup-btn:hover { background: #C5BE9E; }
+    
+    .logout-btn { background: #7A8579; color: #FFFFFF; font-size: 13px; height: 38px; border-radius: 8px; }
+    .logout-btn:hover { background: #687267; }
+    
+    .ask-btn { background: #536954; color: #FFFFFF; width: 140px; }
+    .ask-btn:hover { background: #435444; }
+    
+    .listen-btn { background: #D3CDAD; color: #2C362B; width: 100%; justify-content: center; display: inline-flex; align-items: center; gap: 8px; }
+    .listen-btn:hover { background: #C5BE9E; }
+    
+    .delete-btn { background: transparent; color: #C97A7A; border: 1px solid rgba(201, 122, 122, 0.4); padding: 0 12px; height: 32px; font-size: 12px; border-radius: 6px; font-weight: 500; }
+    .delete-btn:hover { background: #FDF2F2; color: #A85050; border-color: #A85050; }
+
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 30px;
+      padding: 16px 24px;
+      border-radius: 12px;
+      background: #EAEAE4;
+      border: 1px solid rgba(83, 105, 84, 0.05);
     }
 
-    .clear-btn {
-      background: #b0bec5;
-      color: white;
+    .user-info {
+      font-size: 15px;
+      color: #2C362B;
     }
 
-    .download-link {
-      background: #7e57c2;
-      color: white;
+    .workspace {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 35px;
     }
 
-    .hidden { display: none; }
-
-    .status {
-      min-height: 24px;
-      margin-top: 14px;
-      color: #555;
-      font-size: 14px;
+    h3 {
+      font-size: 18px;
+      color: #536954;
+      margin-top: 0;
+      margin-bottom: 16px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 6px;
     }
 
-    .result-box {
+    .chat-section {
+      background: #ffffff;
+      padding: 30px;
+      border-radius: 16px;
+      border: 1px solid rgba(211, 205, 173, 0.4);
+      box-shadow: 0 4px 12px rgba(44, 54, 43, 0.02);
+    }
+
+    .control-row {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .control-row select {
+      flex: 2;
+      height: 42px;
+    }
+    .control-row input {
+      flex: 1;
+      height: 42px;
+      text-align: center;
+    }
+
+    .response-box {
       margin-top: 20px;
-      padding: 18px;
-      border-radius: 18px;
-      background: #f7f9fb;
-      border: 1px solid #edf1f5;
+      padding: 20px;
+      background: #F9F9F6;
+      border-radius: 12px;
+      border-left: 4px solid #536954;
+      border-top: 1px solid rgba(211, 205, 173, 0.3);
+      border-right: 1px solid rgba(211, 205, 173, 0.3);
+      border-bottom: 1px solid rgba(211, 205, 173, 0.3);
+      min-height: 80px;
+      white-space: pre-wrap;
+      line-height: 1.7;
+      color: #2C362B;
+    }
+
+    .audio-wrapper {
+      margin-top: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
     }
 
     audio {
       width: 100%;
+      border-radius: 10px;
+    }
+
+    .history-section {
       margin-top: 10px;
     }
 
-    .help {
-      margin-top: 12px;
+    .list {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      max-height: 500px;
+      overflow-y: auto;
+      padding-right: 4px;
+    }
+
+    /* 스크롤바 디자인 커스텀 */
+    .list::-webkit-scrollbar { width: 6px; }
+    .list::-webkit-scrollbar-track { background: #F9F9F6; }
+    .list::-webkit-scrollbar-thumb { background: #D3CDAD; border-radius: 3px; }
+
+    .item {
+      padding: 20px;
+      border-radius: 14px;
+      background: #ffffff;
+      border: 1px solid rgba(211, 205, 173, 0.4);
+      box-shadow: 0 2px 6px rgba(44, 54, 43, 0.01);
+      transition: all 0.2s ease;
+    }
+    
+    .item:hover {
+      border-color: #536954;
+      box-shadow: 0 4px 12px rgba(83, 105, 84, 0.05);
+    }
+
+    .item-q { font-weight: 700; margin: 0 0 8px; color: #536954; font-size: 16px; }
+    .item-a { margin: 0 0 14px; color: #4F5A4E; font-size: 14.5px; line-height: 1.6; }
+    
+    .item-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12.5px;
+      color: #929D91;
+      border-top: 1px dashed rgba(211, 205, 173, 0.5);
+      padding-top: 12px;
+    }
+
+    .status {
+      min-height: 20px;
+      color: #7A8579;
+      font-size: 13.5px;
+      margin: 12px 0;
+      text-align: center;
+      font-weight: 500;
+    }
+
+    .notice {
+      max-width: 400px;
+      margin: 24px auto 0;
+      padding: 16px;
+      border-radius: 12px;
+      background: #F1EFE6;
+      color: #5E5843;
+      border: 1px solid rgba(211, 205, 173, 0.4);
       font-size: 13px;
-      color: #777;
       line-height: 1.6;
     }
 
+    .hidden { display: none !important; }
+
     @media (max-width: 700px) {
-      .option-box { grid-template-columns: 1fr; }
-      .button-row { justify-content: stretch; }
-      button, .download-link { width: 100%; }
+      .container { padding: 20px; margin: 20px auto; }
+      .control-row { flex-direction: column; gap: 8px; }
+      .top-bar { flex-direction: column; align-items: flex-start; gap: 10px; }
+      .logout-btn { width: 100%; }
+      .ask-btn { width: 100%; }
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <h1>AI TTS 음성 변환기</h1>
-    <div class="subtitle">텍스트를 AI 음성 mp3 파일로 변환합니다</div>
+    <h1>에코 (Echo)</h1>
+    <div class="subtitle">반복되는 업무 병목 해소 · 귀로 듣는 사내 AI 사수</div>
 
-    <div class="info">
-      현재 구조: GitHub Pages 화면 → Google Apps Script 서버 → OpenAI TTS API → mp3 음성 반환<br />
-      API Key는 index.html에 들어가지 않고 Apps Script의 스크립트 속성에 저장됩니다.
-    </div>
-
-    <div class="option-box">
-      <select id="modelSelect">
-        <option value="tts-1">tts-1 빠른 생성</option>
-        <option value="tts-1-hd">tts-1-hd 고품질</option>
-      </select>
-
-      <select id="voiceSelect">
-        <option value="alloy">alloy</option>
-        <option value="echo">echo</option>
-        <option value="fable">fable</option>
-        <option value="onyx">onyx</option>
-        <option value="nova">nova</option>
-        <option value="shimmer">shimmer</option>
-      </select>
-
-      <input id="speedInput" type="number" min="0.25" max="4.0" step="0.05" value="1.0" placeholder="속도" />
-    </div>
-
-    <div>
-      <div class="label">변환할 텍스트</div>
-      <textarea id="textInput" placeholder="음성으로 바꿀 문장을 입력하세요. 예: 안녕하세요. 오늘은 Firebase와 OpenAI API를 활용한 웹페이지 제작을 배워보겠습니다."></textarea>
-    </div>
-
-    <div class="button-row">
-      <button class="clear-btn" id="clearBtn">초기화</button>
-      <button class="make-btn" id="makeBtn">음성 만들기</button>
-    </div>
-
-    <div id="status" class="status"></div>
-
-    <div id="resultBox" class="result-box hidden">
-      <div class="label">생성된 음성</div>
-      <audio id="audioPlayer" controls></audio>
-      <div class="button-row">
-        <a id="downloadLink" class="download-link" href="#" download="tts-audio.mp3">mp3 다운로드</a>
+    <section id="authSection">
+      <div class="auth-box">
+        <h2>로그인 / 회원가입</h2>
+        <input id="emailInput" type="email" placeholder="회사 이메일 계정" />
+        <input id="passwordInput" type="password" placeholder="비밀번호 (6자리 이상)" />
+        <button class="login-btn" id="loginBtn">사수 호출 (로그인)</button>
+        <button class="signup-btn" id="signupBtn">신규 등록 (회원가입)</button>
       </div>
-    </div>
+      <div class="notice">
+        <strong>💡 사수 활용 팁:</strong><br />
+        사내 내부 보안과 데이터 격리를 위해 가입하신 개인 계정별로 질문 히스토리가 안전하게 분리되어 관리됩니다.
+      </div>
+    </section>
 
-    <div class="help">
-      긴 문장은 생성 시간이 오래 걸릴 수 있습니다. 처음에는 짧은 문장으로 테스트해보세요.<br />
-      속도는 0.25부터 4.0까지 조절할 수 있습니다.
-    </div>
+    <section id="mainSection" class="hidden">
+      <div class="top-bar">
+        <div class="user-info">
+          안녕하세요, <strong id="userEmail" style="color:#536954;"></strong> 사원님.
+        </div>
+        <button class="logout-btn" id="logoutBtn">퇴근하기 (로그아웃)</button>
+      </div>
+
+      <div class="workspace">
+        <div class="chat-section">
+          <h3>🌿 AI 사수에게 물어보기</h3>
+          
+          <div class="control-row">
+            <select id="voiceSelect">
+              <option value="nova">nova (친절한 여성 음성)</option>
+              <option value="alloy">alloy (신뢰감 있는 중성 음성)</option>
+              <option value="echo">echo (차분한 남성 음성)</option>
+              <option value="onyx">onyx (무게감 있는 남성 음성)</option>
+            </select>
+            <input id="speedInput" type="number" min="0.5" max="2.0" step="0.1" value="1.0" placeholder="배속" />
+          </div>
+
+          <textarea id="questionInput" placeholder="자꾸 까먹는 사내 매뉴얼, 정산 프로세스 등 무엇이든 편하게 질문하세요. (Ctrl + Enter로 전송)"></textarea>
+          
+          <div style="text-align: right; margin-top: 14px;">
+            <button class="ask-btn" id="askBtn">질문 던지기</button>
+          </div>
+
+          <div id="status" class="status"></div>
+
+          <div id="answerWrapper" class="hidden">
+            <div class="response-box" id="answerBox"></div>
+            <div class="audio-wrapper">
+              <button class="listen-btn" id="listenBtn">🔊 사수 목소리로 답변 듣기</button>
+              <audio id="audioPlayer" controls class="hidden"></audio>
+            </div>
+          </div>
+        </div>
+
+        <div class="history-section">
+          <h3>📋 나의 질문 이력</h3>
+          <div id="dataList" class="list"></div>
+        </div>
+      </div>
+    </section>
   </div>
 
-  <script>
-    const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxzvCeCidpIBm3Ez_AbmzTRrvzCkPa_7x-irAazDPzljPmuqjjHZOqXxfyS1vNh7tX1/exec';
+  <script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
+    import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
+    import { getDatabase, ref, push, set, remove, onValue, off } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js';
 
-    const textInput = document.getElementById('textInput');
-    const modelSelect = document.getElementById('modelSelect');
+    const firebaseConfig = {
+      apiKey: "AIzaSyD8B9o1DPJeJasnREQayA40WIkhxrBCTnw",
+      authDomain: "buyeo-35213.firebaseapp.com",
+      databaseURL: "https://buyeo-35213-default-rtdb.firebaseio.com",
+      projectId: "buyeo-35213",
+      storageBucket: "buyeo-35213.firebasestorage.app",
+      messagingSenderId: "696473893879",
+      appId: "1:696473893879:web:283435b41ab87859a7ccf2",
+      measurementId: "G-BNSGWZN7T7"
+};
+
+    const CHAT_API_URL = 'https://script.google.com/macros/s/AKfycbxTmD_aKFktnu5BcmOj0x84D15A5qOEkAbpoyJ7DEGzJR7UayIGwKLDL7nFhU3hbB_wVw/exec';
+    const TTS_API_URL = 'https://script.google.com/macros/s/AKfycbzvCeCidpIBm3Ez_AbmzTRrvzCkPa_7x-irAazDPzljPmuqjjHZOqXxfyS1vNh7tX1/exec';
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const database = getDatabase(app);
+
+    const authSection = document.getElementById('authSection');
+    const mainSection = document.getElementById('mainSection');
+    const emailInput = document.getElementById('emailInput');
+    const passwordInput = document.getElementById('passwordInput');
+    const loginBtn = document.getElementById('loginBtn');
+    const signupBtn = document.getElementById('signupBtn');
+    const logoutBtn = document.getElementById('logoutBtn');
+    const userEmail = document.getElementById('userEmail');
+    const questionInput = document.getElementById('questionInput');
+    const askBtn = document.getElementById('askBtn');
+    const statusBox = document.getElementById('status');
+    const answerWrapper = document.getElementById('answerWrapper');
+    const answerBox = document.getElementById('answerBox');
+    const listenBtn = document.getElementById('listenBtn');
+    const audioPlayer = document.getElementById('audioPlayer');
     const voiceSelect = document.getElementById('voiceSelect');
     const speedInput = document.getElementById('speedInput');
-    const makeBtn = document.getElementById('makeBtn');
-    const clearBtn = document.getElementById('clearBtn');
-    const statusBox = document.getElementById('status');
-    const resultBox = document.getElementById('resultBox');
-    const audioPlayer = document.getElementById('audioPlayer');
-    const downloadLink = document.getElementById('downloadLink');
+    const dataList = document.getElementById('dataList');
 
-    makeBtn.addEventListener('click', makeSpeech);
-    clearBtn.addEventListener('click', clearPage);
+    let currentUser = null;
+    let currentItemsRef = null;
+    let lastGeneratedAnswer = "";
 
-    textInput.addEventListener('keydown', function(event) {
-      if (event.key === 'Enter' && event.ctrlKey) {
-        makeSpeech();
+    function getAccountInfo() {
+      const email = emailInput.value.trim();
+      const password = passwordInput.value.trim();
+      if (!email || !password) { alert('계정 정보와 패스워드를 모두 채워주세요.'); return null; }
+      if (password.length < 6) { alert('보안을 위해 패스워드는 6자리 이상이 필수입니다.'); return null; }
+      return { email, password };
+    }
+
+    signupBtn.addEventListener('click', async () => {
+      const info = getAccountInfo(); if (!info) return;
+      try {
+        await createUserWithEmailAndPassword(auth, info.email, info.password);
+        alert('에코 사수 서비스에 성공적으로 등록되었습니다!');
+      } catch (err) { alert(getKoreanErrorMessage(err.code)); }
+    });
+
+    loginBtn.addEventListener('click', async () => {
+      const info = getAccountInfo(); if (!info) return;
+      try {
+        await signInWithEmailAndPassword(auth, info.email, info.password);
+      } catch (err) { alert(getKoreanErrorMessage(err.code)); }
+    });
+
+    logoutBtn.addEventListener('click', async () => {
+      try { await signOut(auth); } catch (err) { alert('퇴근(로그아웃) 처리에 실패했습니다.'); }
+    });
+
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        currentUser = user;
+        authSection.classList.add('hidden');
+        mainSection.classList.remove('hidden');
+        userEmail.textContent = user.email;
+        clearInputs();
+        startRealtimeListener(user.uid);
+      } else {
+        currentUser = null;
+        authSection.classList.remove('hidden');
+        mainSection.classList.add('hidden');
+        stopRealtimeListener();
       }
     });
 
-    async function makeSpeech() {
-      const text = textInput.value.trim();
-      const model = modelSelect.value;
+    function clearInputs() {
+      emailInput.value = ''; passwordInput.value = '';
+      questionInput.value = ''; answerWrapper.classList.add('hidden');
+      statusBox.textContent = '';
+    }
+
+    function startRealtimeListener(uid) {
+      stopRealtimeListener();
+      currentItemsRef = ref(database, `users/${uid}/items`);
+      onValue(currentItemsRef, (snapshot) => {
+        renderHistory(snapshot.val());
+      });
+    }
+
+    function stopRealtimeListener() {
+      if (currentItemsRef) { off(currentItemsRef); currentItemsRef = null; }
+    }
+
+    askBtn.addEventListener('click', askEchoMentor);
+    questionInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' && e.ctrlKey) { askEchoMentor(); }
+    });
+
+    async function askEchoMentor() {
+      const question = questionInput.value.trim();
+      if (!question) { alert('사수에게 물어볼 내용을 적어주세요.'); return; }
+
+      try {
+        setLoading(true, '사수가 지식 베이스를 기반으로 답변을 생각 중입니다...');
+        answerWrapper.classList.add('hidden');
+        audioPlayer.classList.add('hidden');
+        audioPlayer.removeAttribute('src');
+
+        const response = await fetch(CHAT_API_URL, {
+          method: 'POST',
+          body: JSON.stringify({ question: question })
+        });
+        const data = await response.json();
+        if (data.error) throw new Error(data.error);
+
+        const answer = data.answer || '답변 생산에 에러가 발생했습니다.';
+        
+        answerBox.textContent = answer;
+        lastGeneratedAnswer = answer;
+        answerWrapper.classList.remove('hidden');
+        statusBox.textContent = '답변 도착 완료!';
+
+        if (currentUser) {
+          const itemsRef = ref(database, `users/${currentUser.uid}/items`);
+          const newItemRef = push(itemsRef);
+          await set(newItemRef, {
+            title: question,
+            content: answer,
+            createdAt: new Date().toLocaleString('ko-KR')
+          });
+        }
+      } catch (err) {
+        console.error(err);
+        statusBox.textContent = '사수 안내 실패';
+        alert('요청 중 문제가 생겼습니다: ' + err.message);
+      } finally {
+        setLoading(false, '');
+      }
+    }
+
+    listenBtn.addEventListener('click', async () => {
+      if (!lastGeneratedAnswer) return;
       const voice = voiceSelect.value;
       const speed = Number(speedInput.value || 1.0);
 
-      if (!text) {
-        alert('음성으로 변환할 텍스트를 입력해주세요.');
-        return;
-      }
-
-      if (speed < 0.25 || speed > 4.0) {
-        alert('속도는 0.25부터 4.0 사이로 입력해주세요.');
-        return;
-      }
-
       try {
-        setLoading(true);
-        resultBox.classList.add('hidden');
-        statusBox.textContent = 'Apps Script 서버에 TTS 요청을 보내는 중입니다.';
+        statusBox.textContent = '목소리를 오디오로 렌더링하는 중입니다...';
+        listenBtn.disabled = true;
 
-        const response = await fetch(APPS_SCRIPT_URL, {
+        const response = await fetch(TTS_API_URL, {
           method: 'POST',
           body: JSON.stringify({
             type: 'tts',
-            text: text,
-            model: model,
+            text: lastGeneratedAnswer,
+            model: 'tts-1',
             voice: voice,
             speed: speed
           })
         });
 
         const data = await response.json();
-
-        if (data.error) {
-          throw new Error(data.error);
-        }
-
-        if (!data.audioBase64) {
-          throw new Error('음성 데이터를 받지 못했습니다.');
-        }
+        if (data.error) throw new Error(data.error);
+        if (!data.audioBase64) throw new Error('음성 원본 리소스를 취득하지 못했습니다.');
 
         const audioUrl = base64ToAudioUrl(data.audioBase64, 'audio/mpeg');
-
         audioPlayer.src = audioUrl;
-        downloadLink.href = audioUrl;
-        downloadLink.download = makeFileName();
-        resultBox.classList.remove('hidden');
-        statusBox.textContent = '음성 생성 완료';
-      } catch (error) {
-        console.error(error);
-        statusBox.textContent = '요청 실패';
-        alert('오류가 발생했습니다.\n\n' + error.message);
+        audioPlayer.classList.remove('hidden');
+        statusBox.textContent = '🔊 사수의 오디오 재생 가동';
+        audioPlayer.play();
+      } catch (err) {
+        console.error(err);
+        alert('오디오 변환 에러: ' + err.message);
+        statusBox.textContent = '오디오 변환 오류';
       } finally {
-        setLoading(false);
+        listenBtn.disabled = false;
       }
-    }
+    });
 
     function base64ToAudioUrl(base64, mimeType) {
       const byteCharacters = atob(base64);
       const byteArrays = [];
-
       for (let offset = 0; offset < byteCharacters.length; offset += 512) {
         const slice = byteCharacters.slice(offset, offset + 512);
         const byteNumbers = new Array(slice.length);
-
         for (let i = 0; i < slice.length; i++) {
           byteNumbers[i] = slice.charCodeAt(i);
         }
-
-        const byteArray = new Uint8Array(byteNumbers);
-        byteArrays.push(byteArray);
+        byteArrays.push(new Uint8Array(byteNumbers));
       }
-
-      const blob = new Blob(byteArrays, { type: mimeType });
-      return URL.createObjectURL(blob);
+      return URL.createObjectURL(new Blob(byteArrays, { type: mimeType }));
     }
 
-    function makeFileName() {
-      const now = new Date();
-      const year = now.getFullYear();
-      const month = String(now.getMonth() + 1).padStart(2, '0');
-      const day = String(now.getDate()).padStart(2, '0');
-      const hour = String(now.getHours()).padStart(2, '0');
-      const minute = String(now.getMinutes()).padStart(2, '0');
-      return `tts-${year}${month}${day}-${hour}${minute}.mp3`;
+    function renderHistory(data) {
+      dataList.innerHTML = '';
+      if (!data) {
+        dataList.innerHTML = '<div style="text-align:center; padding:20px; color:#7A8579;">아직 질문 히스토리가 없습니다. 첫 질문을 던져보세요!</div>';
+        return;
+      }
+      Object.entries(data).reverse().forEach(([id, item]) => {
+        const div = document.createElement('div');
+        div.className = 'item';
+        div.innerHTML = `
+          <p class="item-q">❓ Q. ${escapeHTML(item.title || '')}</p>
+          <p class="item-a">💡 A. ${escapeHTML(item.content || '')}</p>
+          <div class="item-meta">
+            <span>📅 ${item.createdAt || '-'}</span>
+            <button class="delete-btn" onclick="deleteHistory('${id}')">내역 삭제</button>
+          </div>
+        `;
+        dataList.appendChild(div);
+      });
     }
 
-    function setLoading(isLoading) {
-      makeBtn.disabled = isLoading;
-      makeBtn.textContent = isLoading ? '생성 중...' : '음성 만들기';
+    window.deleteHistory = async function(id) {
+      if (!currentUser || !confirm('이 질문 기록을 삭제하시겠습니까?')) return;
+      try {
+        await remove(ref(database, `users/${currentUser.uid}/items/${id}`));
+      } catch (err) { alert('삭제에 실패했습니다.'); }
+    };
+
+    function setLoading(isLoading, text) {
+      askBtn.disabled = isLoading;
+      askBtn.textContent = isLoading ? '사수 작성 중...' : '질문 던지기';
+      statusBox.textContent = text;
     }
 
-    function clearPage() {
-      textInput.value = '';
-      statusBox.textContent = '';
-      audioPlayer.removeAttribute('src');
-      downloadLink.href = '#';
-      resultBox.classList.add('hidden');
+    function escapeHTML(text) {
+      return String(text).replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;').replaceAll("'", '&#039;');
+    }
+
+    function getKoreanErrorMessage(code) {
+      switch (code) {
+        case 'auth/email-already-in-use': return '이미 사내에 등록된 계정 이메일입니다.';
+        case 'auth/invalid-email': return '이메일 계정 형식이 양식에 어긋납니다.';
+        case 'auth/weak-password': return '패스워드가 유약합니다. 6자리 이상으로 작성하세요.';
+        case 'auth/invalid-credential': return '이메일 혹은 패스워드를 다시 확인해 주세요.';
+        default: return `인증 오류가 발생했습니다: ${code}`;
+      }
     }
   </script>
 </body>
 </html>
-
