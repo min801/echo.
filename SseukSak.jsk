@@ -1,0 +1,13 @@
+import React from 'react';
+
+const SseukSak = () => {
+  return (
+    <div style={{ width: '100vw', height: '100vh', background: '#f0f0f0', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+      <div style={{ width: '150px', height: '150px', background: '#fff740', boxShadow: '2px 2px 5px rgba(0,0,0,0.2)' }}>
+        첫 번째 낙서!
+      </div>
+    </div>
+  );
+};
+
+export default SseukSak;
